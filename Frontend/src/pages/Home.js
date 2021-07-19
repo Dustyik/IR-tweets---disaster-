@@ -3,13 +3,22 @@ import { NewTweet } from '../components/NewTweet';
 import '../styles/Main.css';
 import { TweetList } from '../components/TweetList';
 import { SearchIcon } from '../images/svg/svgs'
-
+import axios from 'axios';
 
 
 export const Home = () => {
+
+    const getData = async () => {
+        await axios.post("http://localhost:5000/api", "connect")
+        .then((res) => {
+            console.log(res)
+        })
+    }
+
     return (
         <>
     
+    <button onClick={getData} >CONNECT</button>
 
             <div className="search-box flex-align-center">
                     <SearchIcon />
