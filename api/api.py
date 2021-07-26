@@ -2,17 +2,12 @@ import json
 import os
 from flask import Flask, Response, request
 from flask_cors import CORS
+from IR_engine import DataProcessor
 
 
 app = Flask(__name__)
 CORS(app)
-
-global dataset
-
-def setup_app():
-
-    return
-
+dataProcessor = DataProcessor()
 # end-point to just check server status
 @app.route('/',methods=["GET"])
 def api_root():
@@ -48,7 +43,42 @@ def process_query():
         response = Response(js, status=400, mimetype='application/json')
         return response
 
+@app.route('/getTitles', methods= ['GET'])
+def getTitles():
+    try:
+        print("Requesting for titles", request)
+        data = dataProcessor.data["clean_titles"]
+        data = data.to_json()
+        js = json.dumps(data)
+        # delete the stl file after done parsing
+        response = Response(js, status=200, mimetype='application/json')
+        return response
+
+    except Exception as e:
+        print ("EROR", e)
+        errMsg = "Something went wrong! ERROR: " + str(e) 
+        js = json.dumps(errMsg)
+        response = Response(js, status=400, mimetype='application/json')
+        return response
+
+
+@app.route('/applySearchModels', methods= ['POST'])
+def applySearchModels():
+    try:
+        print("Applying Search Models", request)
+        data = "Success"
+        js = json.dumps(data)
+        # delete the stl file after done parsing
+        response = Response(js, status=200, mimetype='application/json')
+        return response
+
+    except Exception as e:
+        print ("EROR", e)
+        errMsg = "Something went wrong! ERROR: " + str(e) 
+        js = json.dumps(errMsg)
+        response = Response(js, status=400, mimetype='application/json')
+        return response
+
 
 if __name__ == '__main__':
-    setup_app()
     app.run(host="0.0.0.0", port=5000)

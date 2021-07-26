@@ -6,31 +6,29 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.metrics.pairwise import euclidean_distances
 from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize
+from IPython.display import display
 
-#file_path = 
-
-def setup_app():
-    
-    return
+file_path = r"D:\Desktop\IR_term_8\IR-tweets---disaster-\article_titles_stemmed.csv"
 
 class DataProcessor:
+	def __init__(self):
+		self.data = pd.read_csv(file_path) 
+		display(self.data.head())
+		#self.data.title = self.data.title.astype(str)
+		#self.porter = PorterStemmer()
+		#self.get_clean_data()
+		print ("Data Processor up and ready...")
 
-	def __init__(self, filename, col):
-		
-		self.data = pd.read_csv(filename, names=col) 
-		self.data.topic = self.data.topic.astype(str)
-
-		self.porter = PorterStemmer()
-
-	def tokenize_stem_lower(self, text):
+	def tokenize_stem_lower(self, text):	
 	    tokens = word_tokenize(text)
 	    tokens = list(filter(lambda x: x.isalpha(), tokens))
 	    tokens = [self.porter.stem(x.lower()) for x in tokens]
 	    return ' '.join(tokens)
 
 	def get_clean_data(self):
-		self.data['clean_text'] = self.data.apply(lambda x: self.tokenize_stem_lower(x.text), axis=1)
-		return self.data 
+	    self.data['clean_text'] = self.data.apply(lambda x: self.tokenize_stem_lower(x.title), axis=1)
+	    return self.data 
+
 
 class CosineSimilarity:
 
@@ -120,3 +118,4 @@ class EuclideanDistance:
 
 	def get_matrix(self):
 		return self.matrix
+
