@@ -7,6 +7,12 @@ from sklearn.metrics.pairwise import euclidean_distances
 from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize
 
+#file_path = 
+
+def setup_app():
+    
+    return
+
 class DataProcessor:
 
 	def __init__(self, filename, col):

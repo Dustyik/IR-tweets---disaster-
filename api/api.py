@@ -7,6 +7,12 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
+global dataset
+
+def setup_app():
+
+    return
+
 # end-point to just check server status
 @app.route('/',methods=["GET"])
 def api_root():
@@ -44,4 +50,5 @@ def process_query():
 
 
 if __name__ == '__main__':
+    setup_app()
     app.run(host="0.0.0.0", port=5000)

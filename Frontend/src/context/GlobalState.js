@@ -1,6 +1,8 @@
 import React, { createContext, useReducer } from "react";
 import AppReducer from './AppReducer.js';
 
+//tweets will be mapped to this dataset
+
 const initialState = {
     tweets: [
         {

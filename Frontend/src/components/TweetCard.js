@@ -18,7 +18,6 @@ export default class TweetCard extends Component {
             <Link to={`/status/${this.tweet.id}`}>
                 <div className="tweet-card">
                     <div className="left">
-
                         <SmallAvatar width="48" image={this.tweet.user.image} />
                     </div>
                     <div className="right">
