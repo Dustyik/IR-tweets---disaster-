@@ -18,41 +18,25 @@ Functions to write:
 
 '''
 
-titles_file_path = r"D:\Desktop\IR_term_8\IR-tweets---disaster-\article_titles_stemmed.csv"
-tweets_file_path = r"D:\Desktop\IR_term_8\IR-tweets---disaster-\dataset_scrapped.csv"
-
-SEARCH_MODELS = {
-	"tfcs": "Tf-idf w Cosine Sim", 
-	"tfed": "Tf-idf w Euclidean Dist"
-	}
-
-def returnTweetsBasedOnSearchModel(article_id, searchModel):
-	
-    
-	return
+file_path = r"D:\Desktop\IR_term_8\IR-tweets---disaster-\article_titles_stemmed.csv"
 
 class DataProcessor:
 	def __init__(self):
-		self.titles_data = pd.read_csv(titles_file_path) 
-		self.tweets_data = pd.read_csv(tweets_file_path) 
-		display(self.tweets_data.head())
+		self.data = pd.read_csv(file_path) 
+		display(self.data.head())
 		#self.data.title = self.data.title.astype(str)
 		#self.porter = PorterStemmer()
 		#self.get_clean_data()
 		print ("Data Processor up and ready...")
 
-
-
-
-
-	'''
-	Tokenizing of article titles should be done beforehand
 	def tokenize_stem_lower(self, text):	
 	    tokens = word_tokenize(text)
 	    tokens = list(filter(lambda x: x.isalpha(), tokens))
 	    tokens = [self.porter.stem(x.lower()) for x in tokens]
 	    return ' '.join(tokens)
 
+	'''
+	Tokenizing of article titles should be done before hand
 	def get_clean_data(self):
 	    self.data['clean_text'] = self.data.apply(lambda x: self.tokenize_stem_lower(x.title), axis=1)
 	    return self.data 

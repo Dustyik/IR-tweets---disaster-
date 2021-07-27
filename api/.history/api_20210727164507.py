@@ -2,7 +2,7 @@ import json
 import os
 from flask import Flask, Response, request
 from flask_cors import CORS
-from IR_engine import DataProcessor, returnTweetsBasedOnSearchModel
+from IR_engine import DataProcessor
 
 
 app = Flask(__name__)
@@ -68,7 +68,7 @@ def applySearchModels():
         print("Applying Search Models\n")
         jsonData = request.get_json()
         print (jsonData)
-        data = returnTweetsBasedOnSearchModel()
+        data = "Success"
         js = json.dumps(data)
         # delete the stl file after done parsing
         response = Response(js, status=200, mimetype='application/json')

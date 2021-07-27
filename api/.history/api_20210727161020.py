@@ -2,12 +2,12 @@ import json
 import os
 from flask import Flask, Response, request
 from flask_cors import CORS
-from IR_engine import DataProcessor, returnTweetsBasedOnSearchModel
+from IR_engine import DataProcessor
 
 
 app = Flask(__name__)
 CORS(app)
-dataProcessor = DataProcessor() 
+dataProcessor = DataProcessor()
 # end-point to just check server status
 @app.route('/',methods=["GET"])
 def api_root():
@@ -47,7 +47,7 @@ def process_query():
 def getTitles():
     try:
         print("Requesting for titles\n", request)
-        data = dataProcessor.titles_data["clean_titles"]
+        data = dataProcessor.data["clean_titles"]
         data = data.to_json()
         js = json.dumps(data)
         # delete the stl file after done parsing
@@ -62,13 +62,12 @@ def getTitles():
         return response
 
 
-@app.route('/applySearchModels', methods= ['GET', "POST"]) #needs to return relevant tweets and corresponding precision scores
+@app.route('/applySearchModels', methods= ['GET']) #needs to return relevant tweets and corresponding precision scores
 def applySearchModels():
     try:
-        print("Applying Search Models\n")
-        jsonData = request.get_json()
-        print (jsonData)
-        data = returnTweetsBasedOnSearchModel()
+        print("Applying Search Models\n", request.data)
+
+        data = "Success"
         js = json.dumps(data)
         # delete the stl file after done parsing
         response = Response(js, status=200, mimetype='application/json')

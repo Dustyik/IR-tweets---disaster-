@@ -8,45 +8,17 @@ from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize
 from IPython.display import display
 
-'''
-Functions to write:
-1. VSM with cosine sim/Euclidean distance
-2. tf-idf with cosine sim/Euclidean distance
-3. BIM
-4. BM25
-5. BERT
-
-'''
-
-titles_file_path = r"D:\Desktop\IR_term_8\IR-tweets---disaster-\article_titles_stemmed.csv"
-tweets_file_path = r"D:\Desktop\IR_term_8\IR-tweets---disaster-\dataset_scrapped.csv"
-
-SEARCH_MODELS = {
-	"tfcs": "Tf-idf w Cosine Sim", 
-	"tfed": "Tf-idf w Euclidean Dist"
-	}
-
-def returnTweetsBasedOnSearchModel(article_id, searchModel):
-	
-    
-	return
+file_path = r"D:\Desktop\IR_term_8\IR-tweets---disaster-\article_titles_stemmed.csv"
 
 class DataProcessor:
 	def __init__(self):
-		self.titles_data = pd.read_csv(titles_file_path) 
-		self.tweets_data = pd.read_csv(tweets_file_path) 
-		display(self.tweets_data.head())
+		self.data = pd.read_csv(file_path) 
+		display(self.data.head())
 		#self.data.title = self.data.title.astype(str)
 		#self.porter = PorterStemmer()
 		#self.get_clean_data()
 		print ("Data Processor up and ready...")
 
-
-
-
-
-	'''
-	Tokenizing of article titles should be done beforehand
 	def tokenize_stem_lower(self, text):	
 	    tokens = word_tokenize(text)
 	    tokens = list(filter(lambda x: x.isalpha(), tokens))
@@ -56,7 +28,7 @@ class DataProcessor:
 	def get_clean_data(self):
 	    self.data['clean_text'] = self.data.apply(lambda x: self.tokenize_stem_lower(x.title), axis=1)
 	    return self.data 
-	'''
+
 
 class CosineSimilarity:
 

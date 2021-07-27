@@ -21,13 +21,7 @@ Functions to write:
 titles_file_path = r"D:\Desktop\IR_term_8\IR-tweets---disaster-\article_titles_stemmed.csv"
 tweets_file_path = r"D:\Desktop\IR_term_8\IR-tweets---disaster-\dataset_scrapped.csv"
 
-SEARCH_MODELS = {
-	"tfcs": "Tf-idf w Cosine Sim", 
-	"tfed": "Tf-idf w Euclidean Dist"
-	}
-
 def returnTweetsBasedOnSearchModel(article_id, searchModel):
-	
     
 	return
 
@@ -40,10 +34,6 @@ class DataProcessor:
 		#self.porter = PorterStemmer()
 		#self.get_clean_data()
 		print ("Data Processor up and ready...")
-
-
-
-
 
 	'''
 	Tokenizing of article titles should be done beforehand
