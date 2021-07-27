@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, createContext} from 'react';
 import { Logo, HomeIcon, ExploreIcon, NotificationIcon, MessageIcon, BookmarkIcon, ListsIcon, MoreIcon } from '../images/svg/svgs';
 import { SmallAvatar } from '../images/avatars';
 import { Checkbox } from '@material-ui/core';
@@ -10,22 +10,30 @@ const SEARCH_MODELS = ["Search Model 1", "Search Model 2", "Search Model 3", "Se
 
 export const Sidebar = () => {
     const profImageurl = 'https://pbs.twimg.com/profile_images/1247964769669136385/KVCROk2D_bigger.jpg';
-    const [searchModelsLocalState, setSearchModelsLocalState] = useState([])
+    const [searchModels, setSearchModels] = useState([])
 
-    const {setSearchModels, searchModels} = useContext(GlobalContext);
+    const { title, setTitle } = useContext(GlobalContext);
 
     const checkBoxToggled = (event) => {
         const id = event.id
         const checkValue = event.checked
 
         if (checkValue){
-            setSearchModels(id)
-            setSearchModelsLocalState(id)
+
+            setSearchModels(oldVals => {
+                oldVals.push(id)
+                return oldVals
+            })
+
+        }else{
+            setSearchModels(oldVals => oldVals.filter(val => val != id))
         }
     }
 
     const applyFilter = () => {
-        API.applySearchFilters(searchModelsLocalState).then(
+        console.log("apply Filter Clicked")
+        console.log(searchModels)
+        API.applySearchFilters(searchModels).then(
             res => console.log(res)
         )
     }
@@ -39,7 +47,6 @@ export const Sidebar = () => {
                 size = "medium"
                 id = {e}
                 onChange = {(e) => checkBoxToggled(e.target)}
-                checked = {searchModelsLocalState == e}
                 >
                 </Checkbox>
                 {e}
@@ -62,7 +69,8 @@ export const Sidebar = () => {
             </div>
             <h4>
                 Different Search Models, 
-                Choose 1
+                use different Combinations can be used to get different search results,
+                maximum of 2 combinations at once
             </h4>
 
  

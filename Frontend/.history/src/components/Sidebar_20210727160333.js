@@ -25,6 +25,8 @@ export const Sidebar = () => {
     }
 
     const applyFilter = () => {
+        console.log("apply Filter Clicked")
+        console.log(searchModels)
         API.applySearchFilters(searchModelsLocalState).then(
             res => console.log(res)
         )

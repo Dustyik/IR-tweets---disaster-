@@ -4,8 +4,7 @@ import AppReducer from './AppReducer.js';
 //tweets will be mapped to this dataset
 
 const initialState = {
-    title:"nill",
-    searchModels: "", 
+    title:"nill", 
     tweets: [
         {
             id: 1,
@@ -64,28 +63,21 @@ export const GlobalContext = createContext(initialState);
 
 // provider
 export const GlobalProvider = ({ children }) => {
-    const [state, dispatch] = useReducer(AppReducer, initialState);
-
-    function setSearchModels(model){
-        dispatch({
-            type: "SET_SEARCH_MODEL",
-            payload:model
-        })
-    }
+    const [state, dipatch] = useReducer(AppReducer, initialState);
 
     function getTweet(id) {
         return state.tweets.find(tweet => tweet.id == id);
     }
 
-    function setTitle(title) {
-        dispatch({
+    function setTitle(title){
+        return dispatch({
             type: "SET_TITLE",
             payload: title
         })
     }
 
     function addTweet(tweets) {
-        dispatch({
+        dipatch({
             type: 'ADD_TWEET',
             payload: tweets
         })
@@ -93,12 +85,7 @@ export const GlobalProvider = ({ children }) => {
 
     return (
     <GlobalContext.Provider 
-        value={{ tweets: state.tweets, 
-                setTitle, 
-                getTweet, 
-                title:state.title, 
-                setSearchModels,
-                searchModels:state.searchModels}}>
+        value={{ tweets: state.tweets, setTitle, getTweet, title:state.title }}>
         {children}
     </GlobalContext.Provider>)
 }

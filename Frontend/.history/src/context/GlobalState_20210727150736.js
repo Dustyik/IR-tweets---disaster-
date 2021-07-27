@@ -5,7 +5,7 @@ import AppReducer from './AppReducer.js';
 
 const initialState = {
     title:"nill",
-    searchModels: "", 
+    searchModels: [], 
     tweets: [
         {
             id: 1,
@@ -66,9 +66,16 @@ export const GlobalContext = createContext(initialState);
 export const GlobalProvider = ({ children }) => {
     const [state, dispatch] = useReducer(AppReducer, initialState);
 
-    function setSearchModels(model){
+    function addSearchModels(model){
         dispatch({
-            type: "SET_SEARCH_MODEL",
+            type: "ADD_SEARCH_MODEL",
+            payload:model
+        })
+    }
+
+    function removeSearchModels(model){
+        dispatch({
+            type: "REMOVE_SEARCH_MODEL",
             payload:model
         })
     }
@@ -93,12 +100,7 @@ export const GlobalProvider = ({ children }) => {
 
     return (
     <GlobalContext.Provider 
-        value={{ tweets: state.tweets, 
-                setTitle, 
-                getTweet, 
-                title:state.title, 
-                setSearchModels,
-                searchModels:state.searchModels}}>
+        value={{ tweets: state.tweets, setTitle, getTweet, title:state.title, addSearchModels}}>
         {children}
     </GlobalContext.Provider>)
 }

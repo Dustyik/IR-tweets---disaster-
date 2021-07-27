@@ -5,7 +5,7 @@ import AppReducer from './AppReducer.js';
 
 const initialState = {
     title:"nill",
-    searchModels: "", 
+    searchModels: [], 
     tweets: [
         {
             id: 1,
@@ -97,7 +97,7 @@ export const GlobalProvider = ({ children }) => {
                 setTitle, 
                 getTweet, 
                 title:state.title, 
-                setSearchModels,
+                setSearchModels
                 searchModels:state.searchModels}}>
         {children}
     </GlobalContext.Provider>)

@@ -43,6 +43,7 @@ export const Home = () => {
                     <input placeholder="Search Our Corpus Using Headlines" className="search-input w-100" type="text" />
             </div>
 
+            {console.log("Global Context", title)}
             <Button
                 className="btn-primary"
                 variant="outline-primary"

@@ -8,8 +8,10 @@ import { GlobalContext } from '../context/GlobalState'
 
 
 export const Home = () => {
+    const [currentSearchTitle, setCurrentSearchTitle] = useState("nil")
     const [titlesState, setTitlesState] = useState([])
-    const { title, setTitle } = useContext(GlobalContext);
+    
+    const { title } = useContext(GlobalContext);
 
 
     useEffect(() => {
@@ -32,7 +34,7 @@ export const Home = () => {
 
     const randomButtonClick = () => {
         const randomElement = titlesState[Math.floor(Math.random() * titlesState.length)];
-        setTitle(randomElement)
+        setCurrentSearchTitle(randomElement)
     }
     
     return (
@@ -43,6 +45,7 @@ export const Home = () => {
                     <input placeholder="Search Our Corpus Using Headlines" className="search-input w-100" type="text" />
             </div>
 
+            {console.log("Global Context", title)}
             <Button
                 className="btn-primary"
                 variant="outline-primary"

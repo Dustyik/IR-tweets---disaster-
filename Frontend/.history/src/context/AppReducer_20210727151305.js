@@ -32,13 +32,11 @@ export default (state, action) => {
             title: action.payload
         }
 
-        case "SET_SEARCH_MODEL":
+        case "ADD_SEARCH_MODEL":
             return {
             ...state,
-            searchModels: action.payload
+            searchModels: state.searchModels.push(action.payload)
         }
-
-
         default:
             return state
     }

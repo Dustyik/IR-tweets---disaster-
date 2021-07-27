@@ -12,20 +12,28 @@ export const Sidebar = () => {
     const profImageurl = 'https://pbs.twimg.com/profile_images/1247964769669136385/KVCROk2D_bigger.jpg';
     const [searchModelsLocalState, setSearchModelsLocalState] = useState([])
 
-    const {setSearchModels, searchModels} = useContext(GlobalContext);
+    const {addSearchModels, searchModels} = useContext(GlobalContext);
 
     const checkBoxToggled = (event) => {
         const id = event.id
         const checkValue = event.checked
 
         if (checkValue){
-            setSearchModels(id)
-            setSearchModelsLocalState(id)
+            addSearchModels(id)
+            setSearchModelsLocalState(oldVals => {
+                oldVals.push(id)
+                return oldVals
+            })
+
+        }else{
+            setSearchModels(oldVals => oldVals.filter(val => val != id))
         }
     }
 
     const applyFilter = () => {
-        API.applySearchFilters(searchModelsLocalState).then(
+        console.log("apply Filter Clicked")
+        console.log(searchModels)
+        API.applySearchFilters(searchModels).then(
             res => console.log(res)
         )
     }
@@ -39,7 +47,6 @@ export const Sidebar = () => {
                 size = "medium"
                 id = {e}
                 onChange = {(e) => checkBoxToggled(e.target)}
-                checked = {searchModelsLocalState == e}
                 >
                 </Checkbox>
                 {e}
@@ -62,7 +69,8 @@ export const Sidebar = () => {
             </div>
             <h4>
                 Different Search Models, 
-                Choose 1
+                use different Combinations can be used to get different search results,
+                maximum of 2 combinations at once
             </h4>
 
  

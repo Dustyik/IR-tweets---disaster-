@@ -12,19 +12,28 @@ export const Sidebar = () => {
     const profImageurl = 'https://pbs.twimg.com/profile_images/1247964769669136385/KVCROk2D_bigger.jpg';
     const [searchModelsLocalState, setSearchModelsLocalState] = useState([])
 
-    const {setSearchModels, searchModels} = useContext(GlobalContext);
+    const {addSearchModels, searchModels, removeSearchModels} = useContext(GlobalContext);
 
     const checkBoxToggled = (event) => {
         const id = event.id
         const checkValue = event.checked
 
         if (checkValue){
-            setSearchModels(id)
-            setSearchModelsLocalState(id)
+            addSearchModels(id)
+            setSearchModelsLocalState(oldVals => {
+                oldVals.push(id)
+                return oldVals
+            })
+
+        }else{
+            setSearchModelsLocalState(oldVals => oldVals.filter(val => val != id))
+            removeSearchModels(id)
         }
     }
 
     const applyFilter = () => {
+        console.log("apply Filter Clicked")
+        console.log(searchModels)
         API.applySearchFilters(searchModelsLocalState).then(
             res => console.log(res)
         )
@@ -39,7 +48,6 @@ export const Sidebar = () => {
                 size = "medium"
                 id = {e}
                 onChange = {(e) => checkBoxToggled(e.target)}
-                checked = {searchModelsLocalState == e}
                 >
                 </Checkbox>
                 {e}

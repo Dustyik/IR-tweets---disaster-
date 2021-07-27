@@ -25,20 +25,6 @@ export default (state, action) => {
                 ...state,
                 tweets: [...state.tweets, newTweet]
             }
-
-        case "SET_TITLE":
-            return {
-            ...state,
-            title: action.payload
-        }
-
-        case "SET_SEARCH_MODEL":
-            return {
-            ...state,
-            searchModels: action.payload
-        }
-
-
         default:
             return state
     }

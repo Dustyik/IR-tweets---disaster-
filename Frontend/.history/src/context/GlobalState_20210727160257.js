@@ -5,7 +5,7 @@ import AppReducer from './AppReducer.js';
 
 const initialState = {
     title:"nill",
-    searchModels: "", 
+    searchModels: [], 
     tweets: [
         {
             id: 1,

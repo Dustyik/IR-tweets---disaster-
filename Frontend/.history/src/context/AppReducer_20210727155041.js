@@ -32,13 +32,21 @@ export default (state, action) => {
             title: action.payload
         }
 
-        case "SET_SEARCH_MODEL":
+        case "ADD_SEARCH_MODEL":
+            const newSearchModels = state.searchModels
+            newSearchModels.push(action.payload)
             return {
             ...state,
-            searchModels: action.payload
+            searchModels: newSearchModels
         }
 
-
+        case "REMOVE_SEARCH_MODEL":
+            const newSearchModels = state.searchModels
+            newSearchModels.push(action.payload)
+            return {
+            ...state,
+            searchModels: newSearchModels
+        }
         default:
             return state
     }
