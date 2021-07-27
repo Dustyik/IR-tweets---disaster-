@@ -6,7 +6,7 @@ import { Button } from '@material-ui/core';
 import * as API from "../apifunctions"
 import { GlobalContext } from '../context/GlobalState'
 
-const SEARCH_MODELS = ["Tf-idf w Cosine Sim", "Tf-idf w Euclidean Dist"]
+const SEARCH_MODELS = ["Search Model 1", "Search Model 2", "Search Model 3", "Search Model 4"]
 
 export const Sidebar = () => {
     const profImageurl = 'https://pbs.twimg.com/profile_images/1247964769669136385/KVCROk2D_bigger.jpg';
