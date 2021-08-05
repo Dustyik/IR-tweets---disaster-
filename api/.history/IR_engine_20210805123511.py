@@ -1,4 +1,4 @@
-from Word2Vecimplementation import Word2VecModel
+from Word2Vecimplementation import Word2Vec
 import pandas as pd
 import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer
@@ -52,7 +52,7 @@ class DataProcessor:
 		self.tweets_data = self.tweets_data.dropna()
 		self.cosineSimilarity = CosineSimilarity(self.titles_data, self.tweets_data)
 		self.euclideanDistance = EuclideanDistance(self.titles_data, self.tweets_data)	
-		self.Word2Vecquery = Word2VecModel(self.tweets_data)
+		self.Word2Vecquery = Word2Vec(self.tweets_data)
 		print ("Data Processor up and ready...")
 
 	def Word2Vecquery(self, articleId, articleTitle):

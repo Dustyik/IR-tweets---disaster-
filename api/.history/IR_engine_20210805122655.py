@@ -1,4 +1,3 @@
-from Word2Vecimplementation import Word2VecModel
 import pandas as pd
 import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer
@@ -42,7 +41,7 @@ def returnTweetsBasedOnSearchModel(dataProcessor, articleId, articleTitle, searc
 	if searchModel == SEARCH_MODELS["BM25"]:
 		return dataProcessor.BM25query(articleId, articleTitle)
 	if searchModel == SEARCH_MODELS["BM25"]:
-		return dataProcessor.Word2Vecquery(articleId, articleTitle)
+		return dataProcessor.BM25query(articleId, articleTitle)
 
 class DataProcessor:
 	def __init__(self):
@@ -51,13 +50,8 @@ class DataProcessor:
 		self.titles_data = self.titles_data.dropna()
 		self.tweets_data = self.tweets_data.dropna()
 		self.cosineSimilarity = CosineSimilarity(self.titles_data, self.tweets_data)
-		self.euclideanDistance = EuclideanDistance(self.titles_data, self.tweets_data)	
-		self.Word2Vecquery = Word2VecModel(self.tweets_data)
+		self.euclideanDistance = EuclideanDistance(self.titles_data, self.tweets_data)
 		print ("Data Processor up and ready...")
-
-	def Word2Vecquery(self, articleId, articleTitle):
-		
-		return 
 
 	def BM25query(self, articleId, articleTitle):
 		tweet_col_names = ["related_article","tweet_id", "relevance", "text", "clean_text"]
@@ -161,8 +155,11 @@ class EuclideanDistance:
 
 
 #dataProcessor = DataProcessor()
+
+
+
+
 test_title_1 = "Company Update (NYSE:MET): MetLife Increases Share Repurchase Authorization to $1 Billion"
 test_title_2 = "Perkins Eastman Celebrates Groundbreaking of Clark-Lindsey's Small Homes for Dementia Care"
-#display(dataProcessor.BM25query("123", test_title_1))
 
-dataProcessor = DataProcessor()
+#display(dataProcessor.BM25query("123", test_title_1))
