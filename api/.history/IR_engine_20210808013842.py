@@ -53,14 +53,13 @@ class DataProcessor:
 		if searchModel == SEARCH_MODELS["W2Ved"]:
 			rankedDocs = self.Word2Vecquery(articleId, articleTitle, SEARCH_MODELS["W2Ved"])
 
-		rankedDocs = rankedDocs.reset_index(drop = True)
-		rankedDocs = rankedDocs.apply(lambda row: self.checkIfArticleIdMatchesQueryId(row, articleId), axis=1)
+		rankedDocs = rankedDocs.apply(lambda row:checkIfArticleIdMatchesQueryId(row, articleId), axis=1)
 		return rankedDocs
 
-	def checkIfArticleIdMatchesQueryId(self, pandasRow, articleId):
+	def checkIfArticleIdMatchesQueryId(self.pandasRow, articleId):
 		if pandasRow.article_id != articleId:
 			pandasRow.relevance_score = 0
-		return pandasRow
+			return pandasRow
 
 
 	def Word2Vecquery(self, articleId, articleTitle, type = SEARCH_MODELS["W2Vcs"]):	
@@ -80,7 +79,14 @@ class DataProcessor:
 					return_dataFrame = return_dataFrame.append(row)
 					continue
 		#return_dataFrame = return_dataFrame.drop(["clean_text"], axis = 1)
+		return_dataFrame = return_dataFrame.reset_index()
 		return return_dataFrame
+
+	def resetPandasDf(self):
+		self.titles_data = pd.read_csv(titles_file_path) 
+		self.tweets_data = pd.read_csv(tweets_file_path) 
+		return
+
 
 #dataProcessor = DataProcessor()
 test_title_1 = "Company Update (NYSE:MET): MetLife Increases Share Repurchase Authorization to $1 Billion" 
@@ -89,5 +95,5 @@ test_title_2 = "Perkins Eastman Celebrates Groundbreaking of Clark-Lindsey's Sma
 test_title_2_id = "32023021-1141-4832-9939-c8442d505b34"
 #display(dataProcessor.BM25query("123", test_title_1))
 
-#dataProcessor = DataProcessor()
-#ret = dataProcessor.returnTweetsBasedOnSearchModel(dataProcessor, test_title_1_id, test_title_1, "Word2Vec w Cosine Similarity")
+dataProcessor = DataProcessor()
+ret = returnTweetsBasedOnSearchModel(dataProcessor, test_title_1_id, test_title_1, "Word2Vec w Cosine Similarity")

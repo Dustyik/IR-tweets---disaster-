@@ -29,39 +29,37 @@ SEARCH_MODELS = {
 
 tweet_col_names = ["article_id","tweet_id", "relevance", "tweet", "clean_text"]
 
+def returnTweetsBasedOnSearchModel(dataProcessor, articleId, articleTitle, searchModel):
+	#accepts a search model, article title, and article id, returns n most relevant results	
+	if searchModel == SEARCH_MODELS["tfcs"]:
+		return dataProcessor.cosineSimilarity.query(articleId, articleTitle)
+	if searchModel == SEARCH_MODELS["tfed"]:
+		return dataProcessor.euclideanDistance.query(articleId, articleTitle)
+	if searchModel == SEARCH_MODELS["BM25"]:
+		rankedDocs = dataProcessor.BM25query(articleId, articleTitle)
+	if searchModel == SEARCH_MODELS["W2Vcs"]:
+		rankedDocs =  dataProcessor.Word2Vecquery(articleId, articleTitle, SEARCH_MODELS["W2Vcs"])
+	if searchModel == SEARCH_MODELS["W2Ved"]:
+		rankedDocs = dataProcessor.Word2Vecquery(articleId, articleTitle, SEARCH_MODELS["W2Ved"])
+
+	rankedDocs = rankedDocs.apply(lambda row:checkIfArticleIdMatchesQueryId(row, articleId), axis=1)
+	return rankedDocs
+
+def checkIfArticleIdMatchesQueryId(pandasRow, articleId):
+	if pandasRow.article_id != articleId:
+		pandasRow.relevance_score = 0
+	return pandasRow
+
 class DataProcessor:
 	def __init__(self):
 		self.titles_data = pd.read_csv(titles_file_path) 
 		self.tweets_data = pd.read_csv(tweets_file_path) 
 		self.titles_data = self.titles_data.dropna()
 		self.tweets_data = self.tweets_data.dropna()
-		self.cosineSimilarity = CosineSimilarity(self.titles_data, self.tweets_data, return_size = RETURN_SIZE)
-		self.euclideanDistance = EuclideanDistance(self.titles_data, self.tweets_data, return_size = RETURN_SIZE)	
+		self.cosineSimilarity = CosineSimilarity(self.titles_data, self.tweets_data)
+		self.euclideanDistance = EuclideanDistance(self.titles_data, self.tweets_data)	
 		self.word2VecModel = Word2VecModel(self.tweets_data)
 		print ("Data Processor up and ready...")
-
-	def returnTweetsBasedOnSearchModel(self, articleId, articleTitle, searchModel):
-		#accepts a search model, article title, and article id, returns n most relevant results	
-		if searchModel == SEARCH_MODELS["tfcs"]:
-			return self.cosineSimilarity.query(articleId, articleTitle)
-		if searchModel == SEARCH_MODELS["tfed"]:
-			return self.euclideanDistance.query(articleId, articleTitle)
-		if searchModel == SEARCH_MODELS["BM25"]:
-			rankedDocs = self.BM25query(articleId, articleTitle)
-		if searchModel == SEARCH_MODELS["W2Vcs"]:
-			rankedDocs =  self.Word2Vecquery(articleId, articleTitle, SEARCH_MODELS["W2Vcs"])
-		if searchModel == SEARCH_MODELS["W2Ved"]:
-			rankedDocs = self.Word2Vecquery(articleId, articleTitle, SEARCH_MODELS["W2Ved"])
-
-		rankedDocs = rankedDocs.reset_index(drop = True)
-		rankedDocs = rankedDocs.apply(lambda row: self.checkIfArticleIdMatchesQueryId(row, articleId), axis=1)
-		return rankedDocs
-
-	def checkIfArticleIdMatchesQueryId(self, pandasRow, articleId):
-		if pandasRow.article_id != articleId:
-			pandasRow.relevance_score = 0
-		return pandasRow
-
 
 	def Word2Vecquery(self, articleId, articleTitle, type = SEARCH_MODELS["W2Vcs"]):	
 		rankedDocs = self.word2VecModel.return_most_significant_tweets(articleTitle, type = type)
@@ -80,7 +78,9 @@ class DataProcessor:
 					return_dataFrame = return_dataFrame.append(row)
 					continue
 		#return_dataFrame = return_dataFrame.drop(["clean_text"], axis = 1)
+		return_dataFrame = return_dataFrame.reset_index()
 		return return_dataFrame
+
 
 #dataProcessor = DataProcessor()
 test_title_1 = "Company Update (NYSE:MET): MetLife Increases Share Repurchase Authorization to $1 Billion" 
@@ -89,5 +89,5 @@ test_title_2 = "Perkins Eastman Celebrates Groundbreaking of Clark-Lindsey's Sma
 test_title_2_id = "32023021-1141-4832-9939-c8442d505b34"
 #display(dataProcessor.BM25query("123", test_title_1))
 
-#dataProcessor = DataProcessor()
-#ret = dataProcessor.returnTweetsBasedOnSearchModel(dataProcessor, test_title_1_id, test_title_1, "Word2Vec w Cosine Similarity")
+dataProcessor = DataProcessor()
+ret = returnTweetsBasedOnSearchModel(dataProcessor, test_title_1_id, test_title_1, "Word2Vec w Cosine Similarity")

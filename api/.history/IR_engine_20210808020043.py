@@ -53,6 +53,9 @@ class DataProcessor:
 		if searchModel == SEARCH_MODELS["W2Ved"]:
 			rankedDocs = self.Word2Vecquery(articleId, articleTitle, SEARCH_MODELS["W2Ved"])
 
+		for column in rankedDocs.columns:
+			print (column)
+		display(rankedDocs)
 		rankedDocs = rankedDocs.reset_index(drop = True)
 		rankedDocs = rankedDocs.apply(lambda row: self.checkIfArticleIdMatchesQueryId(row, articleId), axis=1)
 		return rankedDocs
@@ -80,7 +83,14 @@ class DataProcessor:
 					return_dataFrame = return_dataFrame.append(row)
 					continue
 		#return_dataFrame = return_dataFrame.drop(["clean_text"], axis = 1)
+		return_dataFrame = return_dataFrame.reset_index()
 		return return_dataFrame
+
+	def resetPandasDf(self):
+		self.titles_data = pd.read_csv(titles_file_path) 
+		self.tweets_data = pd.read_csv(tweets_file_path) 
+		return
+
 
 #dataProcessor = DataProcessor()
 test_title_1 = "Company Update (NYSE:MET): MetLife Increases Share Repurchase Authorization to $1 Billion" 

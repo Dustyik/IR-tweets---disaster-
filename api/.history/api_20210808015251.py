@@ -77,6 +77,8 @@ def applySearchModels():
         return_data["ranking_score"] = [RANKING_MODEL, get_rank(RANKING_MODEL, pandas_df)]
         js = json.dumps(return_data)
         response = Response(js, status=200, mimetype='application/json')
+        
+        dataProcessor.resetPandasDf() #the pandas dataframe needs to be reset to a fresh dataframe
         return response
 
     except Exception as e:

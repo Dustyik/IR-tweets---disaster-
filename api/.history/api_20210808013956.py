@@ -71,7 +71,7 @@ def applySearchModels():
         searchModel = jsonData["data"]
         articleTitle = jsonData["queryTitle"]
         articleId = jsonData["articleId"]
-        pandas_df = dataProcessor.returnTweetsBasedOnSearchModel(articleId = articleId, articleTitle = articleTitle, searchModel = searchModel)
+        pandas_df = dataProcessor.returnTweetsBasedOnSearchModel(dataProcessor = dataProcessor, articleId = articleId, articleTitle = articleTitle, searchModel = searchModel)
         return_data = {}
         return_data["pandas_data"] = pandas_df.to_json()
         return_data["ranking_score"] = [RANKING_MODEL, get_rank(RANKING_MODEL, pandas_df)]

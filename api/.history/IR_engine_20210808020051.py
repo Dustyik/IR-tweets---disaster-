@@ -82,6 +82,12 @@ class DataProcessor:
 		#return_dataFrame = return_dataFrame.drop(["clean_text"], axis = 1)
 		return return_dataFrame
 
+	def resetPandasDf(self):
+		self.titles_data = pd.read_csv(titles_file_path) 
+		self.tweets_data = pd.read_csv(tweets_file_path) 
+		return
+
+
 #dataProcessor = DataProcessor()
 test_title_1 = "Company Update (NYSE:MET): MetLife Increases Share Repurchase Authorization to $1 Billion" 
 test_title_1_id = "8b31120e-d654-45b4-a5df-8fef674339d8"
