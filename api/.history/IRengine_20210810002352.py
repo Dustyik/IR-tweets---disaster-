@@ -1,8 +1,10 @@
-from Word2Vecimplementation import Word2VecModel
+from word2Vecimplementation import *
 from BM25implementation import *
 from tfidfImplementation import *
+from queryLikelihoodModelImplementation import *
+from BERTimplementation import *
+from utils import QueryParsers
 from IPython.display import display
-from UnigramLanguageModelImplementation import *
 
 RETURN_SIZE = 30
 
@@ -26,7 +28,8 @@ SEARCH_MODELS = {
 	"BM25": "Okapi-BM25",
 	"W2Vcs": "Word2Vec w Cosine Similarity",
 	"W2Ved": "Word2Vec w Euclidean Distance",
-	"ULM": "Unigram Language Model" 
+	"QLM": "Query Likelihood Model",
+	"BERT": "BERT w tfidf",
 	}
 
 tweet_col_names = ["article_id","tweet_id", "relevance", "tweet", "clean_text"]
@@ -36,30 +39,34 @@ class DataProcessor:
 		self.titles_data = pd.read_csv(titles_file_path) 
 		self.tweets_data = pd.read_csv(tweets_file_path) 
 		self.titles_data = self.titles_data.dropna()
-		self.tweets_data = self.tweets_data.dropna()
-		self.cosineSimilarity = CosineSimilarity(self.titles_data, self.tweets_data, return_size = RETURN_SIZE)
-		self.euclideanDistance = EuclideanDistance(self.titles_data, self.tweets_data, return_size = RETURN_SIZE)	
+		self.tweets_data = self.tweets_data.dropna()[:30]
+		self.cosineSimilarity = CosineSimilarity(self.tweets_data, return_size = RETURN_SIZE)
+		self.euclideanDistance = EuclideanDistance(self.tweets_data, return_size = RETURN_SIZE)	
 		self.word2VecModel = Word2VecModel(self.tweets_data)
-		self.unigramLanguageModel = UnigramLanguageModel(self.tweets_data)
+		self.queryLikelihoodModel = QueryLikelihoodModel(self.tweets_data)
+		self.BERTmodel = BERTmodel(self.tweets_data)
 		print ("Data Processor up and ready...")
 
 	def returnTweetsBasedOnSearchModel(self, articleId, articleTitle, searchModel):
 		#accepts a search model, article title, and article id, returns n most relevant results	
 		if searchModel == SEARCH_MODELS["tfcs"]:
-			return self.cosineSimilarity.query(articleId, articleTitle)
+			rankedDocs = self.cosineSimilarity.query(articleId, articleTitle)
 		if searchModel == SEARCH_MODELS["tfed"]:
-			return self.euclideanDistance.query(articleId, articleTitle)
+			rankedDocs = self.euclideanDistance.query(articleId, articleTitle)
 		if searchModel == SEARCH_MODELS["BM25"]:
 			rankedDocs = self.BM25query(articleId, articleTitle)
 		if searchModel == SEARCH_MODELS["W2Vcs"]:
 			rankedDocs =  self.Word2Vecquery(articleId, articleTitle, SEARCH_MODELS["W2Vcs"])
 		if searchModel == SEARCH_MODELS["W2Ved"]:
 			rankedDocs = self.Word2Vecquery(articleId, articleTitle, SEARCH_MODELS["W2Ved"])
-		if searchModel == SEARCH_MODELS["ULM"]:
-			rankedDocs = self.UnigramLanguageModelQuery(articleId, articleTitle)
+		if searchModel == SEARCH_MODELS["QLM"]:
+			rankedDocs = self.queryLikelihoodModelQuery(articleId, articleTitle)
+		if searchModel == SEARCH_MODELS["BERT"]:
+			rankedDocs = self.BERTquery(articleId, articleTitle)
 
 		rankedDocs = rankedDocs.reset_index(drop = True)
 		rankedDocs = rankedDocs.apply(lambda row: self.checkIfArticleIdMatchesQueryId(row, articleId), axis=1)
+		display(rankedDocs)
 		return rankedDocs
 
 	def checkIfArticleIdMatchesQueryId(self, pandasRow, articleId):
@@ -67,8 +74,12 @@ class DataProcessor:
 			pandasRow.relevance_score = 0
 		return pandasRow
 
-	def UnigramLanguageModelQuery(self, articleId, articleTitle):
-		rankedDocs = self.unigramLanguageModel.getQueryLikelihoodModelScore(articleTitle)
+	def BERTquery(self, articleId, articleTitle):
+		rankedDocs = self.BERTmodel.return_BERT_query(articleId, articleTitle)
+		return rankedDocs
+
+	def queryLikelihoodModelQuery(self, articleId, articleTitle):
+		rankedDocs = self.queryLikelihoodModel.getQueryLikelihoodModelScore(articleTitle)
 		return rankedDocs[:RETURN_SIZE]
 
 	def Word2Vecquery(self, articleId, articleTitle, type = SEARCH_MODELS["W2Vcs"]):	
@@ -76,7 +87,6 @@ class DataProcessor:
 		return rankedDocs[:RETURN_SIZE]
 
 	def BM25query(self, articleId, articleTitle):
-		tweet_col_names = ["related_article","tweet_id", "relevance", "text", "clean_text"]
 		query_list = QueryParsers(articleTitle).query
 		bM25Class = BM25Class(self.tweets_data, query_list)
 		rankedDocs = bM25Class.rankedDocs[:RETURN_SIZE]
@@ -97,6 +107,7 @@ test_title_2 = "Perkins Eastman Celebrates Groundbreaking of Clark-Lindsey's Sma
 test_title_2_id = "32023021-1141-4832-9939-c8442d505b34"
 #display(dataProcessor.BM25query("123", test_title_1))
 
-#dataProcessor = DataProcessor()
-#dataProcessor.returnTweetsBasedOnSearchModel(test_title_1_id, test_title_1, "Unigram Language Model")
+dataProcessor = DataProcessor()
+display(dataProcessor.BERTquery(test_title_1_id, test_title_1))
+dataProcessor.returnTweetsBasedOnSearchModel(test_title_1_id, test_title_1, "Query Likelihood Model")
 
