@@ -55,8 +55,6 @@ class DataProcessor:
 			rankedDocs =  self.Word2Vecquery(articleId, articleTitle, SEARCH_MODELS["W2Vcs"])
 		if searchModel == SEARCH_MODELS["W2Ved"]:
 			rankedDocs = self.Word2Vecquery(articleId, articleTitle, SEARCH_MODELS["W2Ved"])
-		if searchModel == SEARCH_MODELS["ULM"]:
-			rankedDocs = self.UnigramLanguageModelQuery(articleId, articleTitle)
 
 		rankedDocs = rankedDocs.reset_index(drop = True)
 		rankedDocs = rankedDocs.apply(lambda row: self.checkIfArticleIdMatchesQueryId(row, articleId), axis=1)
@@ -67,9 +65,6 @@ class DataProcessor:
 			pandasRow.relevance_score = 0
 		return pandasRow
 
-	def UnigramLanguageModelQuery(self, articleId, articleTitle):
-		rankedDocs = self.unigramLanguageModel.getQueryLikelihoodModelScore(articleTitle)
-		return rankedDocs[:RETURN_SIZE]
 
 	def Word2Vecquery(self, articleId, articleTitle, type = SEARCH_MODELS["W2Vcs"]):	
 		rankedDocs = self.word2VecModel.return_most_significant_tweets(articleTitle, type = type)
@@ -97,6 +92,6 @@ test_title_2 = "Perkins Eastman Celebrates Groundbreaking of Clark-Lindsey's Sma
 test_title_2_id = "32023021-1141-4832-9939-c8442d505b34"
 #display(dataProcessor.BM25query("123", test_title_1))
 
-#dataProcessor = DataProcessor()
-#dataProcessor.returnTweetsBasedOnSearchModel(test_title_1_id, test_title_1, "Unigram Language Model")
+dataProcessor = DataProcessor()
+dataProcessor.returnTweetsBasedOnSearchModel(dataProcessor, test_title_1_id, test_title_1, "Word2Vec w Cosine Similarity")
 

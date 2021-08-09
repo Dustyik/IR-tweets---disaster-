@@ -97,6 +97,6 @@ test_title_2 = "Perkins Eastman Celebrates Groundbreaking of Clark-Lindsey's Sma
 test_title_2_id = "32023021-1141-4832-9939-c8442d505b34"
 #display(dataProcessor.BM25query("123", test_title_1))
 
-#dataProcessor = DataProcessor()
-#dataProcessor.returnTweetsBasedOnSearchModel(test_title_1_id, test_title_1, "Unigram Language Model")
+dataProcessor = DataProcessor()
+dataProcessor.returnTweetsBasedOnSearchModel(test_title_1_id, test_title_1, "Unigram Language Model")
 

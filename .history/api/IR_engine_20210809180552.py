@@ -36,7 +36,7 @@ class DataProcessor:
 		self.titles_data = pd.read_csv(titles_file_path) 
 		self.tweets_data = pd.read_csv(tweets_file_path) 
 		self.titles_data = self.titles_data.dropna()
-		self.tweets_data = self.tweets_data.dropna()
+		self.tweets_data = self.tweets_data.dropna()[:2]
 		self.cosineSimilarity = CosineSimilarity(self.titles_data, self.tweets_data, return_size = RETURN_SIZE)
 		self.euclideanDistance = EuclideanDistance(self.titles_data, self.tweets_data, return_size = RETURN_SIZE)	
 		self.word2VecModel = Word2VecModel(self.tweets_data)
@@ -69,6 +69,7 @@ class DataProcessor:
 
 	def UnigramLanguageModelQuery(self, articleId, articleTitle):
 		rankedDocs = self.unigramLanguageModel.getQueryLikelihoodModelScore(articleTitle)
+		display(rankedDocs)
 		return rankedDocs[:RETURN_SIZE]
 
 	def Word2Vecquery(self, articleId, articleTitle, type = SEARCH_MODELS["W2Vcs"]):	

@@ -8,7 +8,7 @@ import { GlobalContext } from '../context/GlobalState'
 import { uniqueNamesGenerator, Config, adjectives, colors, animals } from 'unique-names-generator';
 
 
-const SEARCH_MODELS = ["Tf-idf w Cosine Sim", "Tf-idf w Euclidean Dist", "Okapi-BM25", "Word2Vec w Cosine Similarity", "Word2Vec w Euclidean Distance", "Unigram Language Model"]
+const SEARCH_MODELS = ["Tf-idf w Cosine Sim", "Tf-idf w Euclidean Dist", "Okapi-BM25", "Word2Vec w Cosine Similarity", "Word2Vec w Euclidean Distance", "Unigram Language Model" ]
 
 export const Sidebar = () => {
     const profImageurl = 'https://pbs.twimg.com/profile_images/1247964769669136385/KVCROk2D_bigger.jpg';

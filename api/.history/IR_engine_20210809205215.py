@@ -69,6 +69,7 @@ class DataProcessor:
 
 	def UnigramLanguageModelQuery(self, articleId, articleTitle):
 		rankedDocs = self.unigramLanguageModel.getQueryLikelihoodModelScore(articleTitle)
+		display(rankedDocs)
 		return rankedDocs[:RETURN_SIZE]
 
 	def Word2Vecquery(self, articleId, articleTitle, type = SEARCH_MODELS["W2Vcs"]):	
